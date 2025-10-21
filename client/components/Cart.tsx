@@ -97,7 +97,7 @@ export default function Cart() {
         <div>
           <p className="flex justify-between text-lg font-bold">
             <span>Total:</span>
-            <span>${total.toFixed(2)}</span>
+            <span>BDT{total.toFixed(2)}</span>
           </p>
           <Link href={isCheckoutDisabled ? "#" : "/checkout"}>
             <button
