@@ -19,6 +19,13 @@ export default function LoginModal({ onLogin }: { onLogin: () => void }) {
   const correctUsername = "admin.leadsko";
   const correctPassword = "LeadsKo@2025";
 
+  /**
+   * Handles the login process by verifying the username and password, and
+   * sets the "adminLoggedIn" item in local storage to true if the credentials
+   * are correct. If the credentials are invalid, it displays an error toast.
+   * It also calls the onLogin function provided as a prop when the login process is
+   * successful.
+   */
   const handleLogin = () => {
     setLoading(true);
     setTimeout(() => {
