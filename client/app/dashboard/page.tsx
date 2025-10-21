@@ -7,6 +7,7 @@ import FileItem from "@/components/dashboard/FileItem";
 import { FileItemType } from "@/data/folder";
 import useSWR from "swr";
 import { fetcher } from "../lib/fetcher";
+import LoginModal from "@/components/dashboard/LoginModal";
 
 function Content() {
   // Fetch all folders
@@ -86,9 +87,24 @@ function Content() {
 }
 
 export default function Page() {
+  const [authenticated, setAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const loggedIn = localStorage.getItem("adminLoggedIn") === "true";
+    setAuthenticated(loggedIn);
+  }, []);
+
+  const handleLoginSuccess = () => {
+    setAuthenticated(true);
+  };
+
   return (
     <div className="h-screen flex flex-col lg:flex-row overflow-hidden">
-      <Content />
+      {authenticated ? (
+        <Content />
+      ) : (
+        <LoginModal onLogin={handleLoginSuccess} />
+      )}
     </div>
   );
 }
