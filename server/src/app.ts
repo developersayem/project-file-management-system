@@ -12,32 +12,16 @@ import path from "path";
 
 const app = express();
 
-// Your frontend origin
-// const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",").map(origin => origin.trim()) || [];
 
 app.use(
   cors({
     origin: (origin, callback) => {
-      if (!origin || process.env.ALLOWED_ORIGINS?.split(",").includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
+      callback(null, origin || "*"); // Reflect the requesting origin
     },
     credentials: true,
   })
 );
 
-app.set("trust proxy", 1); //   Required when behind proxy (e.g. Webuzo/Nginx)
-
-
-
-// Multer setup (memory storage, max 5MB file size)
-const storage = multer.memoryStorage();
-export const upload = multer({
-  storage,
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB max
-});
 
 // set trust proxy
 app.set("trust proxy", 1);
@@ -54,15 +38,6 @@ app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
 // Use custom logger middleware early
 app.use(loggerMiddleware);
-
- // Passport.js setup
- app.use(
-  session({
-    secret: process.env.SESSION_SECRET || "keyboard cat",
-    resave: false,
-    saveUninitialized: true,
-  })
-);
 
 
 // Import routes
