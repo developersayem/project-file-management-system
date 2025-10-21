@@ -9,7 +9,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Edit3 } from "lucide-react"; // use any edit icon
+import { Edit3 } from "lucide-react";
 import { toast } from "sonner";
 import { KeyedMutator } from "swr";
 import { Label } from "@/components/ui/label";
@@ -27,12 +27,14 @@ export function EditFolderModal({
   mutateFolderData,
 }: EditFolderModalProps) {
   const [open, setOpen] = React.useState(false);
-  const [name, setName] = React.useState(folder.name || "");
+  const [name, setName] = React.useState("");
 
-  // Update input when folder changes
+  // Reset input whenever modal opens or folder changes
   React.useEffect(() => {
-    setName(folder.name || "");
-  }, [folder]);
+    if (open) {
+      setName(folder.name || "");
+    }
+  }, [open, folder]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

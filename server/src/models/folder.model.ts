@@ -1,18 +1,22 @@
 import mongoose, { Schema, Document, Types } from "mongoose";
 
-// ---------- TypeScript Interfaces ----------
 export interface IFolder extends Document {
   name: string;
-  files: Types.ObjectId[]; // ✅ Correct type for references
+  parentFolder?: Types.ObjectId | null; // null means it's a root folder
+  files: Types.ObjectId[]; // all files inside this folder
 }
 
-// ---------- Schema ----------
 const FolderSchema = new Schema<IFolder>(
   {
     name: {
       type: String,
       required: true,
       trim: true,
+    },
+    parentFolder: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Folder",
+      default: null, // root folder has no parent
     },
     files: [
       {
@@ -24,5 +28,4 @@ const FolderSchema = new Schema<IFolder>(
   { timestamps: true }
 );
 
-// ---------- Export Model ----------
 export const Folder = mongoose.model<IFolder>("Folder", FolderSchema);

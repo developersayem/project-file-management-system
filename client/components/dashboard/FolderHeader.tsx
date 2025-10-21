@@ -2,7 +2,7 @@
 
 import React from "react";
 import { FileItemType, FolderType } from "@/data/folder";
-import { CreateFileModal } from "./create-file-modal";
+import { CreateFileModal } from "./add-file-modal";
 import { KeyedMutator } from "swr";
 import { Button } from "../ui/button";
 import { Trash } from "lucide-react";
@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import api from "@/app/lib/axios";
 import { EditFolderModal } from "./edit-folder-modal";
 import { EditMarqueeModal } from "./edit-marquee-modal";
+import { UnitPriceModal } from "./unit-price-modal";
 
 interface FolderHeaderProps {
   folder: FolderType;
@@ -47,6 +48,7 @@ export default function FolderHeader({
           <h2 className="text-2xl font-semibold">{folder.name}</h2>
           {/* actions buttons */}
           <div className="flex items-center gap-2 z-50">
+            <UnitPriceModal />
             <EditMarqueeModal />
             <div className="flex items-center gap-2">
               <CreateFileModal

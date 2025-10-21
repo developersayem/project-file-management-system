@@ -12,7 +12,7 @@ import LoginModal from "@/components/dashboard/LoginModal";
 function Content() {
   // Fetch all folders
   const { data: foldersRes, mutate: mutateFolderData } = useSWR(
-    "/app/folders-with-leads",
+    "/app/folders-with-subfolders",
     fetcher
   );
   const folders = useMemo(() => foldersRes?.data || [], [foldersRes]);

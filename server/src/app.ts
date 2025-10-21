@@ -35,7 +35,6 @@ app.use("/public", express.static(path.join(process.cwd(), "public")));
 app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
 
-
 // Use custom logger middleware early
 app.use(loggerMiddleware);
 
@@ -44,11 +43,14 @@ app.use(loggerMiddleware);
 import folderRoutes from "./routes/folder.routes"
 import fileRoutes from "./routes/file.routes"
 import appRoutes from "./routes/app.routes"
+import unitPriceRoutes from "./routes/unit.price.routes"
+
 
 // Use routes
 app.use("/api/v1/folders", folderRoutes);
 app.use("/api/v1/files", fileRoutes);
 app.use("/api/v1/app", appRoutes)
+app.use("/api/v1/unit-price", unitPriceRoutes)
 
 
 

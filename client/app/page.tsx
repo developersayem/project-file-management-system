@@ -12,7 +12,7 @@ import MarqueeCom from "@/components/marquee-com";
 
 function Content() {
   // Fetch all folders
-  const { data: foldersRes } = useSWR("/app/folders-with-leads", fetcher);
+  const { data: foldersRes } = useSWR("/app/folders-with-subfolders", fetcher);
   const folders = useMemo(() => foldersRes?.data || [], [foldersRes]);
 
   // State for selected folder

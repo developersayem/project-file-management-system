@@ -11,11 +11,12 @@ import {
 import { Button } from "@/components/ui/button";
 import { FilePlus } from "lucide-react";
 import { toast } from "sonner";
-import { KeyedMutator } from "swr";
+import useSWR, { KeyedMutator } from "swr";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { FileItemType } from "@/data/folder";
 import api from "@/app/lib/axios";
+import { fetcher } from "@/app/lib/fetcher";
 
 interface CreateFileModalProps {
   folderId: string;
@@ -28,32 +29,61 @@ export function CreateFileModal({
 }: CreateFileModalProps) {
   const [open, setOpen] = React.useState(false);
   const [name, setName] = React.useState("");
-  const [price, setPrice] = React.useState("");
-  const [numbers, setNumbers] = React.useState<number>();
+  const [numbers, setNumbers] = React.useState<number>(0);
+  const [unitPriceInput, setUnitPriceInput] = React.useState<number | "">("");
+  const [price, setPrice] = React.useState<number | "">("");
   const [currency, setCurrency] = React.useState("BDT");
+  const [manualPrice, setManualPrice] = React.useState(false);
+
+  // Fetch default unit price
+  const { data: unitPriceRes } = useSWR("/unit-price", fetcher);
+  const unitPriceData = React.useMemo(
+    () => unitPriceRes?.data || [],
+    [unitPriceRes]
+  );
+  const defaultUnitPrice = unitPriceData[0]?.unitprice || 0;
+
+  // Calculate price automatically if user hasn't manually entered it
+  React.useEffect(() => {
+    const currentUnitPrice = unitPriceInput || defaultUnitPrice;
+    if (!manualPrice && numbers > 0) {
+      setPrice(numbers * currentUnitPrice);
+    }
+  }, [numbers, unitPriceInput, manualPrice, defaultUnitPrice]);
+
+  const handleNumbersChange = (value: number) => setNumbers(value);
+  const handleUnitPriceChange = (value: number) => setUnitPriceInput(value);
+  const handlePriceChange = (value: number) => {
+    setPrice(value);
+    setManualPrice(true); // User manually typed price
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name || !price) return toast.error("Name and price are required");
+    if (!name || !price)
+      return toast.error("Name, numbers, and price are required");
+
+    const payload = {
+      name,
+      folder: folderId,
+      numbers,
+      price,
+      currency,
+      unitPrice: unitPriceInput || defaultUnitPrice,
+    };
 
     try {
-      const payload = {
-        name,
-        folder: folderId,
-        price,
-        numbers,
-        currency,
-      };
-
       const res = await api.post("/files", payload);
-
       if (res.status === 201) {
         toast.success("File created successfully");
-        await mutateFilesData?.(); // Revalidate files list
+        await mutateFilesData?.();
+        // Reset form
         setName("");
-        setPrice("");
         setNumbers(0);
+        setUnitPriceInput("");
+        setPrice("");
         setCurrency("BDT");
+        setManualPrice(false);
         setOpen(false);
       }
     } catch (err) {
@@ -66,10 +96,10 @@ export function CreateFileModal({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button size="sm" className="w-full">
-          <FilePlus className="w-4 h-4" />
-          Add a new file
+          <FilePlus className="w-4 h-4" /> Add a new file
         </Button>
       </DialogTrigger>
+
       <DialogContent className="sm:max-w-lg p-6">
         <DialogHeader>
           <DialogTitle>Add File</DialogTitle>
@@ -87,24 +117,39 @@ export function CreateFileModal({
           </div>
 
           <div className="space-y-2">
-            <Label>Price</Label>
-            <Input
-              placeholder="Enter price"
-              value={price}
-              onChange={(e) => setPrice(e.target.value)}
-              required
-            />
-          </div>
-
-          <div className="space-y-2">
             <Label>Numbers</Label>
             <Input
               type="number"
               placeholder="Enter Leads numbers"
               value={numbers}
-              onChange={(e) => setNumbers(parseInt(e.target.value))}
+              onChange={(e) => handleNumbersChange(parseInt(e.target.value))}
               required
             />
+          </div>
+
+          <div className="flex gap-2 items-start">
+            <div className="w-full space-y-1">
+              <Label>Unit Price</Label>
+              <Input
+                type="number"
+                placeholder={`Default: ${defaultUnitPrice}`}
+                value={unitPriceInput}
+                onChange={(e) =>
+                  handleUnitPriceChange(parseFloat(e.target.value))
+                }
+              />
+            </div>
+
+            <div className="w-full space-y-1">
+              <Label>Price</Label>
+              <Input
+                type="number"
+                placeholder="Calculated or manual"
+                value={price}
+                onChange={(e) => handlePriceChange(parseFloat(e.target.value))}
+                required
+              />
+            </div>
           </div>
 
           <div className="space-y-2">

@@ -11,5 +11,8 @@ export interface FolderType {
   name: string;
   leads?: number;
   files?: FileItemType[];
+  totalLeads?: number;
+  fileCount?: number;
+  unitPrice?: number
   subfolders?: FolderType[];
 }

@@ -8,16 +8,22 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { FolderPlus } from "lucide-react";
 import { toast } from "sonner";
-import { KeyedMutator } from "swr";
-// import api from "@/lib/axios";
+import useSWR, { KeyedMutator } from "swr";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { FolderType } from "@/data/folder";
 import api from "@/app/lib/axios";
-
+import { fetcher } from "@/app/lib/fetcher";
 interface CreateFolderModalProps {
   mutateFolderData?: KeyedMutator<{ data: FolderType[] }>;
 }
@@ -27,19 +33,25 @@ export function CreateFolderModal({
 }: CreateFolderModalProps) {
   const [open, setOpen] = React.useState(false);
   const [name, setName] = React.useState("");
+  const [parentFolder, setParentFolder] = React.useState("");
+
+  // Fetch all folders
+  const { data: foldersRes } = useSWR("/app/folders-with-leads", fetcher);
+  const folders = React.useMemo(() => foldersRes?.data || [], [foldersRes]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim()) return toast.error("Folder name cannot be empty");
 
     try {
-      const res = await api.post("/folders", { name }); // Make sure your API supports folder creation
+      const res = await api.post("/folders", { name, parentFolder }); // Make sure your API supports folder creation
       if (res.status === 201) {
         toast.success("Folder created successfully");
         await mutateFolderData?.();
         setName("");
         setOpen(false);
       }
+      console.log(parentFolder);
     } catch (error) {
       console.error(error);
       toast.error("Failed to create folder");
@@ -68,6 +80,20 @@ export function CreateFolderModal({
               onChange={(e) => setName(e.target.value)}
               required
             />
+          </div>
+          <div className="space-y-2">
+            <Select onValueChange={(value) => setParentFolder(value)}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select Parent Folder" />
+              </SelectTrigger>
+              <SelectContent className="w-full">
+                {folders.map((folder: FolderType) => (
+                  <SelectItem key={folder._id} value={folder._id}>
+                    {folder.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
           <div className="flex justify-end">
