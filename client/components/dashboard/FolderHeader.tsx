@@ -11,6 +11,7 @@ import api from "@/app/lib/axios";
 import { EditFolderModal } from "./edit-folder-modal";
 import { EditMarqueeModal } from "./edit-marquee-modal";
 import { UnitPriceModal } from "./unit-price-modal";
+import AuthenticationModal from "./authentication-modal";
 
 interface FolderHeaderProps {
   folder: FolderType;
@@ -67,6 +68,13 @@ export default function FolderHeader({
               onClick={() => handleDeleteFolder(folder._id as string)}
             >
               <Trash /> Delete this folder
+            </Button>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => setSelectedFolder(folder._id as string)}
+            >
+              <AuthenticationModal />
             </Button>
           </div>
         </div>

@@ -1,11 +1,11 @@
 import express from "express";
-import { getAllFoldersWithLeads, getFolderWithFiles, getFoldersWithStats, getMarquee, updateMarquee } from "../controller/app.controller";
+import { getAllFoldersWithLeads, getFolderWithFiles, getFoldersWithCounts, getMarquee, updateMarquee } from "../controller/app.controller";
 
 const router = express.Router();
 
 
 router.get("/folders-with-leads", getAllFoldersWithLeads);
-router.get("/folders-with-subfolders", getFoldersWithStats);
+router.get("/folders-with-subfolders", getFoldersWithCounts);
 
 // GET → Fetch latest marquee
 router.get("/marquee", getMarquee);

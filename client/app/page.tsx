@@ -9,6 +9,7 @@ import { FileItemType } from "@/data/folder";
 import useSWR from "swr";
 import { fetcher } from "./lib/fetcher";
 import MarqueeCom from "@/components/marquee-com";
+import PasswordGate from "@/components/PasswordGate";
 
 function Content() {
   // Fetch all folders
@@ -77,11 +78,11 @@ function Content() {
 
 export default function Page() {
   return (
-    <>
+    <PasswordGate>
       <div className="flex flex-col lg:flex-row overflow-hidden">
         <Content />
       </div>
       <MarqueeCom />
-    </>
+    </PasswordGate>
   );
 }

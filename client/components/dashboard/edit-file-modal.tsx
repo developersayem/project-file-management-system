@@ -29,9 +29,14 @@ import {
 interface EditFileModalProps {
   file: FileItemType;
   mutateFilesData?: KeyedMutator<{ data: FileItemType[] }>;
+  mutateFolderData?: KeyedMutator<{ data: FileItemType[] }>;
 }
 
-export function EditFileModal({ file, mutateFilesData }: EditFileModalProps) {
+export function EditFileModal({
+  file,
+  mutateFilesData,
+  mutateFolderData,
+}: EditFileModalProps) {
   const [open, setOpen] = React.useState(false);
   const [name, setName] = React.useState(file.name);
   const [numbers, setNumbers] = React.useState(file.numbers || 0);
@@ -83,6 +88,7 @@ export function EditFileModal({ file, mutateFilesData }: EditFileModalProps) {
       if (res.status === 200) {
         toast.success("File updated successfully");
         await mutateFilesData?.();
+        await mutateFolderData?.();
         setOpen(false);
       }
     } catch (err) {

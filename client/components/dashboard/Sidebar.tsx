@@ -34,9 +34,20 @@ const FolderItem = ({
     e.stopPropagation();
     setSelectedFolder(folder._id);
 
-    // Toggle only if folder has subfolders
     if (hasSubfolders) setOpen((prev) => !prev);
   };
+
+  const { fileCount = 0, subfolderCount = 0, totalLeads = 0 } = folder;
+
+  // Prepare count label dynamically
+  let countLabel = "";
+  if (subfolderCount > 0 && fileCount > 0) {
+    countLabel = `Folders (${subfolderCount}) • Files (${fileCount})`;
+  } else if (subfolderCount > 0) {
+    countLabel = `Folders (${subfolderCount})`;
+  } else if (fileCount > 0) {
+    countLabel = `Files (${fileCount})`;
+  }
 
   return (
     <li className="w-full">
@@ -61,13 +72,16 @@ const FolderItem = ({
 
           <div>
             <div className="font-semibold capitalize">{folder.name}</div>
-            <div className="text-xs text-gray-500">
-              Files ({folder.fileCount || 0}) • Leads ({folder.totalLeads || 0})
-            </div>
+
+            {/* Only show if there’s something to display */}
+            {countLabel && (
+              <div className="text-xs text-gray-500">
+                {countLabel} • Leads ({totalLeads || 0})
+              </div>
+            )}
           </div>
         </div>
 
-        {/* Chevron only for folders with subfolders */}
         {hasSubfolders && (
           <div>
             {open ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
@@ -100,7 +114,6 @@ export default function Sidebar({
   setSelectedFolder,
   mutateFolderData,
 }: SidebarProps) {
-  console.log(folders);
   return (
     <aside className="w-full lg:w-1/5 min-w-[250px] bg-gray-100 border-r border-gray-200 flex flex-col overflow-hidden text-black px-3">
       {/* Header */}

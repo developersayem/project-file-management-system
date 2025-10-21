@@ -16,4 +16,8 @@ export interface FolderType {
   fileCount?: number;
   unitPrice?: number
   subfolders?: FolderType[];
+  displayCount?: number;
+  countType?: "files" | "folders";
+  subfolderCount?: number;
+
 }
