@@ -66,13 +66,11 @@ app.use(loggerMiddleware);
 
 
 // Import routes
-import authRoutes from "./routes/auth/index";
 import folderRoutes from "./routes/folder.routes"
 import fileRoutes from "./routes/file.routes"
 import appRoutes from "./routes/app.routes"
 
 // Use routes
-app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/folders", folderRoutes);
 app.use("/api/v1/files", fileRoutes);
 app.use("/api/v1/app", appRoutes)
