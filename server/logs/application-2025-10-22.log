@@ -25,3 +25,6 @@
 2025-10-22 00:02:49 [info]: ::1 - GET /api/v1/app/68f77c54a4742181259cdc9f/files 304 - 103ms
 2025-10-22 00:02:50 [info]: ::1 - GET /api/v1/app/68f75ce21929292bbed8fbc5/files 304 - 91ms
 2025-10-22 00:02:53 [info]: ::1 - GET /api/v1/app/68f7c505fc6d5a1c004870a9/files 304 - 98ms
+2025-10-22 00:03:34 [info]: ::1 - GET /api/v1/app/marquee 304 - 88ms
+2025-10-22 00:03:34 [info]: ::1 - GET /api/v1/app/folders-with-subfolders 304 - 98ms
+2025-10-22 00:03:34 [info]: ::1 - GET /api/v1/app/68f7c505fc6d5a1c004870a9/files 304 - 110ms

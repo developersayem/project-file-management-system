@@ -5,11 +5,10 @@ interface AxiosRequestConfigWithRetry extends AxiosRequestConfig {
   _retry?: boolean;
 }
 
-// "https://project-file-management-system.onrender.com/api/v1"
 
 // Create Axios instance
 const api = axios.create({
-  baseURL: "http://localhost:5001/api/v1", 
+  baseURL: "https://project-file-management-system.onrender.com/api/v1", 
   withCredentials: true, // send cookies automatically
 });
 
@@ -25,7 +24,7 @@ api.interceptors.response.use(
       try {
         // Call refresh endpoint; cookies are sent automatically
         await axios.post(
-        `http://localhost:5001/api/v1/auth/refresh-token`,
+        `https://project-file-management-system.onrender.com/api/v1/api/v1/auth/refresh-token`,
           {},
           { withCredentials: true }
         );
