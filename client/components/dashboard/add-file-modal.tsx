@@ -17,6 +17,13 @@ import { Input } from "@/components/ui/input";
 import { FileItemType } from "@/data/folder";
 import api from "@/app/lib/axios";
 import { fetcher } from "@/app/lib/fetcher";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface CreateFileModalProps {
   folderId: string;
@@ -34,6 +41,7 @@ export function CreateFileModal({
   const [price, setPrice] = React.useState<number | "">("");
   const [currency, setCurrency] = React.useState("BDT");
   const [manualPrice, setManualPrice] = React.useState(false);
+  const [fileType, setFileType] = React.useState("xls"); // Default file type
 
   // Fetch default unit price
   const { data: unitPriceRes } = useSWR("/unit-price", fetcher);
@@ -43,7 +51,7 @@ export function CreateFileModal({
   );
   const defaultUnitPrice = unitPriceData[0]?.unitprice || 0;
 
-  // Calculate price automatically if user hasn't manually entered it
+  // Automatically calculate price
   React.useEffect(() => {
     const currentUnitPrice = unitPriceInput || defaultUnitPrice;
     if (!manualPrice && numbers > 0) {
@@ -55,7 +63,7 @@ export function CreateFileModal({
   const handleUnitPriceChange = (value: number) => setUnitPriceInput(value);
   const handlePriceChange = (value: number) => {
     setPrice(value);
-    setManualPrice(true); // User manually typed price
+    setManualPrice(true);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -70,6 +78,7 @@ export function CreateFileModal({
       price,
       currency,
       unitPrice: unitPriceInput || defaultUnitPrice,
+      icon: fileType, // Send the selected file type
     };
 
     try {
@@ -84,6 +93,7 @@ export function CreateFileModal({
         setPrice("");
         setCurrency("BDT");
         setManualPrice(false);
+        setFileType("xls");
         setOpen(false);
       }
     } catch (err) {
@@ -152,14 +162,32 @@ export function CreateFileModal({
             </div>
           </div>
 
-          <div className="space-y-2">
-            <Label>Currency</Label>
-            <Input
-              placeholder="Currency"
-              value={currency}
-              onChange={(e) => setCurrency(e.target.value)}
-              required
-            />
+          <div className="space-y-2 flex items-start gap-2">
+            <div className="w-full space-y-1">
+              <Label>Currency</Label>
+              <Input
+                placeholder="Currency"
+                value={currency}
+                onChange={(e) => setCurrency(e.target.value)}
+                required
+              />
+            </div>
+
+            <div className="space-y-1">
+              <Label>File Type</Label>
+              <Select
+                value={fileType}
+                onValueChange={(value) => setFileType(value)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="xls">XLS</SelectItem>
+                  <SelectItem value="pdf">PDF</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
 
           <div className="flex justify-end">

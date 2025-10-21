@@ -6,6 +6,7 @@ export interface IFile extends Document {
   price: string;
   numbers:number;
   currency: string;
+  icon:string
 }
 
 const FileSchema = new Schema<IFile>(
@@ -15,7 +16,7 @@ const FileSchema = new Schema<IFile>(
     price: { type: String, required: true },
     numbers: { type: Number, required: true },
     currency: { type: String, required: true },
-  },
+    icon: { type: String, required: true ,enum:["xls","pdf"]}, },
   { timestamps: true }
 );
 

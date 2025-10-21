@@ -18,6 +18,13 @@ import { FileItemType } from "@/data/folder";
 import api from "@/app/lib/axios";
 import useSWR from "swr";
 import { fetcher } from "@/app/lib/fetcher";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface EditFileModalProps {
   file: FileItemType;
@@ -32,6 +39,7 @@ export function EditFileModal({ file, mutateFilesData }: EditFileModalProps) {
   const [price, setPrice] = React.useState(file.price || 0);
   const [currency, setCurrency] = React.useState(file.currency || "BDT");
   const [manualPrice, setManualPrice] = React.useState(false);
+  const [fileType, setFileType] = React.useState(file.icon || "xls"); // Use existing icon or default
 
   // Fetch default unit price
   const { data: unitPriceRes } = useSWR("/unit-price", fetcher);
@@ -67,6 +75,7 @@ export function EditFileModal({ file, mutateFilesData }: EditFileModalProps) {
       price,
       currency,
       unitPrice: unitPriceInput || defaultUnitPrice,
+      icon: fileType, // Include the file type
     };
 
     try {
@@ -143,14 +152,32 @@ export function EditFileModal({ file, mutateFilesData }: EditFileModalProps) {
             </div>
           </div>
 
-          <div className="space-y-2">
-            <Label>Currency</Label>
-            <Input
-              placeholder="Currency"
-              value={currency}
-              onChange={(e) => setCurrency(e.target.value)}
-              required
-            />
+          <div className="space-y-2 flex items-start gap-2">
+            <div className="w-full space-y-1">
+              <Label>Currency</Label>
+              <Input
+                placeholder="Currency"
+                value={currency}
+                onChange={(e) => setCurrency(e.target.value)}
+                required
+              />
+            </div>
+
+            <div className="space-y-1">
+              <Label>File Type</Label>
+              <Select
+                value={fileType}
+                onValueChange={(value) => setFileType(value)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="xls">XLS</SelectItem>
+                  <SelectItem value="pdf">PDF</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
 
           <div className="flex justify-end">

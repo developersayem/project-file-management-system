@@ -9,20 +9,32 @@ import { Folder } from "../models/folder.model";
  * @desc Create a file inside a folder
  */
 export const createFile = asyncHandler(async (req: Request, res: Response) => {
-  const { name, price, numbers, currency, folder } = req.body;
+  const { name, price, numbers, currency, folder, icon } = req.body;
+  console.log(req.body)
+
 
   if (!name?.trim()) throw new ApiError(400, "File name is required");
-  if (!price) throw new ApiError(400, "File price is required");
+  if (price === undefined || price === null) throw new ApiError(400, "File price is required");
+  if (!numbers && numbers !== 0) throw new ApiError(400, "Numbers are required");
+  if (!currency?.trim()) throw new ApiError(400, "Currency is required");
   if (!folder) throw new ApiError(400, "Folder ID is required");
+  if (!icon?.trim()) throw new ApiError(400, "File type/icon is required");
 
   const folderExists = await Folder.findById(folder);
   if (!folderExists) throw new ApiError(400, "Folder does not exist");
 
   // Prevent duplicates in same folder
-  const exists = await File.findOne({ name, folder });
+  const exists = await File.findOne({ name: name.trim(), folder });
   if (exists) throw new ApiError(400, "File with this name already exists in the folder");
 
-  const file = await File.create({ name: name.trim(), folder, price, numbers, currency });
+  const file = await File.create({
+    name: name.trim(),
+    folder,
+    price: price.toString(), // Store as string to match schema
+    numbers,
+    currency,
+    icon,
+  });
 
   await Folder.findByIdAndUpdate(folder, { $push: { files: file._id } });
 
@@ -34,14 +46,24 @@ export const createFile = asyncHandler(async (req: Request, res: Response) => {
  */
 export const editFile = asyncHandler(async (req: Request, res: Response) => {
   const fileId = req.params.id;
-  const { name, price, numbers, currency } = req.body;
+  const { name, price, numbers, currency, icon } = req.body;
 
   if (!fileId) throw new ApiError(400, "File ID is required");
   if (!name?.trim()) throw new ApiError(400, "File name is required");
+  if (price === undefined || price === null) throw new ApiError(400, "File price is required");
+  if (!numbers && numbers !== 0) throw new ApiError(400, "Numbers are required");
+  if (!currency?.trim()) throw new ApiError(400, "Currency is required");
+  if (!icon?.trim()) throw new ApiError(400, "File type/icon is required");
 
   const updated = await File.findByIdAndUpdate(
     fileId,
-    { name: name.trim(), price, numbers, currency },
+    {
+      name: name.trim(),
+      price: price.toString(),
+      numbers,
+      currency,
+      icon,
+    },
     { new: true }
   );
 
@@ -49,7 +71,6 @@ export const editFile = asyncHandler(async (req: Request, res: Response) => {
 
   res.status(200).json(new ApiResponse(200, updated, "File updated successfully"));
 });
-
 /**
  * @desc Delete a file
  */

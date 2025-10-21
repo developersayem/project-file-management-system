@@ -5,10 +5,13 @@ interface AxiosRequestConfigWithRetry extends AxiosRequestConfig {
   _retry?: boolean;
 }
 
+const localhost = "http://localhost:5001";
+const production = "https://project-file-management-system.onrender.com";
+
 
 // Create Axios instance
 const api = axios.create({
-  baseURL: "https://project-file-management-system.onrender.com/api/v1", 
+  baseURL: `${production}/api/v1`,
   withCredentials: true, // send cookies automatically
 });
 

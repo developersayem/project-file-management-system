@@ -35,6 +35,8 @@ function Content() {
 
   const folderWithFiles = folderFilesRes?.data || { files: [] };
 
+  console.log(folderWithFiles);
+
   // Normalize file IDs to _id
   folderWithFiles.files = folderWithFiles.files.map(
     (f: { _id?: string; id?: string }) => ({

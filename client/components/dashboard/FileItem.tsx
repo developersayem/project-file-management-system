@@ -1,8 +1,8 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import React from "react";
 import { FileItemType } from "@/data/folder";
-import { FaFileExcel } from "react-icons/fa6";
 import { Button } from "../ui/button";
 import { Trash } from "lucide-react";
 import { EditFileModal } from "./edit-file-modal";
@@ -31,21 +31,25 @@ export default function FileItem({ file, mutateFilesData }: FileItemProps) {
   };
 
   return (
-    <div className="border border-gray-200 p-4 rounded shadow hover:shadow-md transition flex justify-between items-center text-black capitalize">
+    <div className="border border-gray-200 p-1 rounded shadow hover:shadow-md transition flex justify-between items-center text-black capitalize">
       <div className="flex items-center gap-2">
-        <FaFileExcel className="text-green-700 text-2xl" />
+        {file.icon === "pdf" ? (
+          <img src="/pdf.png" alt="" className="w-15 h-15" />
+        ) : (
+          <img src="/xls.png" alt="" className="w-15 h-15" />
+        )}
         <div>
           <p>{file.name}</p>
-          <p className="text-sm text-gray-500">
-            Number of Leads: {file.numbers}
-          </p>
-          <p className="text-sm text-gray-600 mb-2">
-            <span className="px-1">{file.price}</span>
-            {file.currency}
-          </p>
+          <div className="flex gap-2">
+            <p className="text-sm text-gray-500">Leads: {file.numbers}</p>
+            <p className="text-sm bg-blue-500 text-white rounded px-1">
+              {file.price}
+              <span className="pl-1"> {file.currency}</span>
+            </p>
+          </div>
         </div>
       </div>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 pr-3">
         <EditFileModal file={file} mutateFilesData={mutateFilesData} />
         <Button
           variant="destructive"

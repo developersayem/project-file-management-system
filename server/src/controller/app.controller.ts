@@ -31,6 +31,7 @@ export const getFolderWithFiles = asyncHandler(async (req: Request, res: Respons
       price: Number(f.price),
       numbers: f.numbers,
       currency: f.currency,
+      icon: f.icon,
     })),
   };
 

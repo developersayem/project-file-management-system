@@ -4,6 +4,7 @@ export interface FileItemType {
   price?: number;
   numbers?: number;
   currency?: string;
+  icon?: string;
 }
 
 export interface FolderType {

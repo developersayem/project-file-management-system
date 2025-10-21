@@ -1,9 +1,9 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import React from "react";
 import { FileItemType } from "@/data/folder";
 import { useCart } from "@/context/CartContext";
-import { FaFileExcel } from "react-icons/fa6";
 
 interface FileItemProps {
   file: FileItemType;
@@ -16,7 +16,11 @@ export default function FileItem({ file }: FileItemProps) {
   return (
     <div className="border border-gray-200 p-4 rounded shadow hover:shadow-md transition flex justify-between items-center text-black capitalize">
       <div className="flex items-center gap-2">
-        <FaFileExcel className="text-green-700 text-2xl" />
+        {file.icon === "pdf" ? (
+          <img src="/pdf.png" alt="" className="w-15 h-15" />
+        ) : (
+          <img src="/xls.png" alt="" className="w-15 h-15" />
+        )}
         <div>
           <p>{file.name}</p>
           <p className="text-[12px] text-gray-500">
