@@ -1,0 +1,32 @@
+[
+  {
+    "_id": { "$oid": "6711a1111111111111111111" },
+    "name": "All Club Numbers",
+    "createdAt": { "$date": "2025-10-18T12:00:00Z" },
+    "updatedAt": { "$date": "2025-10-18T12:00:00Z" }
+  },
+  {
+    "_id": { "$oid": "6711a1111111111111111112" },
+    "name": "Real Estate Leads",
+    "createdAt": { "$date": "2025-10-18T12:00:00Z" },
+    "updatedAt": { "$date": "2025-10-18T12:00:00Z" }
+  },
+  {
+    "_id": { "$oid": "6711a1111111111111111113" },
+    "name": "E-commerce Buyers",
+    "createdAt": { "$date": "2025-10-18T12:00:00Z" },
+    "updatedAt": { "$date": "2025-10-18T12:00:00Z" }
+  },
+  {
+    "_id": { "$oid": "6711a1111111111111111114" },
+    "name": "Corporate Clients",
+    "createdAt": { "$date": "2025-10-18T12:00:00Z" },
+    "updatedAt": { "$date": "2025-10-18T12:00:00Z" }
+  },
+  {
+    "_id": { "$oid": "6711a1111111111111111115" },
+    "name": "Local Business Owners",
+    "createdAt": { "$date": "2025-10-18T12:00:00Z" },
+    "updatedAt": { "$date": "2025-10-18T12:00:00Z" }
+  }
+]
