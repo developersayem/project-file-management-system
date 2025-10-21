@@ -22,7 +22,7 @@ const MarqueeCom = () => {
       onMouseLeave={() => setPaused(false)}
     >
       <div
-        className={`inline-block py-7 text-lg font-semibold animate-marquee ${
+        className={`inline-block py-2 text-lg font-semibold animate-marquee ${
           paused ? "paused" : ""
         }`}
       >
@@ -32,14 +32,14 @@ const MarqueeCom = () => {
       <style jsx>{`
         @keyframes marquee {
           0% {
-            transform: translateX(100%);
+            transform: translateX(300%);
           }
           100% {
             transform: translateX(-100%);
           }
         }
         .animate-marquee {
-          animation: marquee 15s linear infinite;
+          animation: marquee 30s linear infinite;
         }
         .paused {
           animation-play-state: paused;

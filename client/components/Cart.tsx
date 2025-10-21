@@ -35,7 +35,7 @@ export default function Cart() {
   };
 
   return (
-    <aside className="text-black lg:w-1/4 min-w-[250px] bg-gray-50 border-l border-gray-200 flex flex-col h-[calc(100vh-80px)]">
+    <aside className="text-black lg:w-1/4 min-w-[250px] bg-gray-50 border-l border-gray-200 flex flex-col h-[calc(100vh-40px)]">
       {/* Header */}
       <div className="py-8 px-4 border-b bg-gray-50 sticky top-0 z-10 flex gap-2 items-center">
         <h2 className="text-xl font-bold">Cart</h2>
@@ -97,7 +97,7 @@ export default function Cart() {
         <div>
           <p className="flex justify-between text-lg font-bold">
             <span>Total:</span>
-            <span>BDT{total.toFixed(2)}</span>
+            <span>BDT {total.toFixed(2)}</span>
           </p>
           <Link href={isCheckoutDisabled ? "#" : "/checkout"}>
             <button
