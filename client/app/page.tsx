@@ -79,7 +79,7 @@ function Content() {
 export default function Page() {
   return (
     <PasswordGate>
-      <div className="h-[calc(100vh-40px)]  flex flex-col lg:flex-row overflow-hidden">
+      <div className="md:h-[calc(100vh-40px)]  flex flex-col lg:flex-row overflow-hidden">
         <Content />
       </div>
       <MarqueeCom />
