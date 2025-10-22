@@ -171,7 +171,7 @@ export function OrderReceipt({ orderId }: OrderReceiptProps) {
               <tr className="border-b-2 border-gray-200">
                 <th className="text-left pb-2">Item</th>
                 <th className="text-center pb-2">Unit</th>
-                <th className="text-center pb-2">Numbers</th>
+                <th className="text-center pb-2">Leads</th>
                 <th className="text-right pb-2">Amount</th>
               </tr>
             </thead>
@@ -193,7 +193,7 @@ export function OrderReceipt({ orderId }: OrderReceiptProps) {
         {/* Summary */}
         <div className="space-y-3 border-t pt-6 mt-4">
           <div className="flex justify-between">
-            <span>Total Numbers:</span>
+            <span>Total Leads:</span>
             <span>{totalNumbers.toLocaleString()}</span>
           </div>
           <div className="flex justify-between">

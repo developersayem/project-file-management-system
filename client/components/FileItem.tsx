@@ -14,7 +14,7 @@ export default function FileItem({ file }: FileItemProps) {
   const alreadyInCart = isInCart(file._id);
 
   return (
-    <div className="border border-gray-200 p-4 rounded shadow hover:shadow-md transition flex justify-between items-center text-black capitalize">
+    <div className="border border-gray-200 p-1 rounded shadow hover:shadow-md transition flex justify-between items-center text-black capitalize">
       <div className="flex items-center gap-2">
         {file.icon === "pdf" ? (
           <img src="/pdf.png" alt="" className="w-15 h-15" />

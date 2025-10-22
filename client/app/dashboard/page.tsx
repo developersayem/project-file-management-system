@@ -63,7 +63,7 @@ function Content() {
               setSelectedFolder={setSelectedFolder}
             />
             {folderWithFiles.files.length ? (
-              <div className="grid grid-cols-1 gap-4 px-5">
+              <div className="grid grid-cols-1 gap-4 px-5 pb-5">
                 {folderWithFiles.files.map((file: FileItemType) => (
                   <FileItem
                     key={file._id}

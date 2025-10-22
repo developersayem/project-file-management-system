@@ -50,7 +50,7 @@ const FolderItem = ({
   }
 
   return (
-    <li className="w-full">
+    <li className="w-full pb-5">
       <div
         onClick={handleClick}
         className={`flex items-center justify-between py-2 px-3 rounded cursor-pointer transition-all 

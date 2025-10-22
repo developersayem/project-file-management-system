@@ -54,7 +54,7 @@ function Content() {
           <>
             <FolderHeader folder={folderWithFiles} />
             {folderWithFiles.files.length ? (
-              <div className="grid grid-cols-1 gap-4 px-5">
+              <div className="grid grid-cols-1 gap-4 px-5 pb-5">
                 {folderWithFiles.files.map((file: FileItemType) => (
                   <FileItem key={file._id} file={file} />
                 ))}
@@ -79,7 +79,7 @@ function Content() {
 export default function Page() {
   return (
     <PasswordGate>
-      <div className="flex flex-col lg:flex-row overflow-hidden">
+      <div className="h-[calc(100vh-40px)]  flex flex-col lg:flex-row overflow-hidden">
         <Content />
       </div>
       <MarqueeCom />

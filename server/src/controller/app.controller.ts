@@ -69,48 +69,64 @@ export const getFolderWithFiles = asyncHandler(async (req: Request, res: Respons
     .json(new ApiResponse(200, responseData, "Folder and files fetched successfully"));
 });
 
-
 export const getFoldersWithCounts = asyncHandler(async (req: Request, res: Response) => {
-  // Find all root folders (those without a parent)
-  const rootFolders = await Folder.find({ parentFolder: null });
+  // Fetch root folders sorted A → Z by name
+  const rootFolders = await Folder.find({ parentFolder: null }).sort({ name: 1 });
 
-  // Define the recursive function with explicit return type
-const getFolderDetails = async (folder: IFolder): Promise<FolderDetails> => {
-  const files: IFile[] = await File.find({ folder: folder._id });
-  const subfolders: IFolder[] = await Folder.find({ parentFolder: folder._id });
+  // Define recursive function
+  const getFolderDetails = async (folder: IFolder): Promise<FolderDetails> => {
+    const files: IFile[] = await File.find({ folder: folder._id });
 
-  const subfolderDetails: FolderDetails[] = await Promise.all(
-    subfolders.map((sub) => getFolderDetails(sub))
-  );
+    // Sort subfolders A → Z
+    const subfolders: IFolder[] = await Folder.find({ parentFolder: folder._id }).sort({ name: 1 });
 
-  const hasSubfolders = subfolders.length > 0;
+    const subfolderDetails: FolderDetails[] = await Promise.all(
+      subfolders.map((sub) => getFolderDetails(sub))
+    );
 
-  // Only sum files if no subfolders, else sum subfolder totalLeads
-  const totalLeads = hasSubfolders
-    ? subfolderDetails.reduce((sum, sub) => sum + sub.totalLeads, 0)
-    : files.reduce((sum, f) => sum + (f.numbers || 0), 0);
+    const hasSubfolders = subfolders.length > 0;
 
-  const fileCount = hasSubfolders ? 0 : files.length;
-  const subfolderCount = subfolders.length;
+    const totalLeads = hasSubfolders
+      ? subfolderDetails.reduce((sum, sub) => sum + sub.totalLeads, 0)
+      : files.reduce((sum, f) => sum + (f.numbers || 0), 0);
 
-  const countType: "files" | "folders" = hasSubfolders ? "folders" : "files";
-  const displayCount = hasSubfolders ? subfolderCount : files.length;
+    const fileCount = hasSubfolders ? 0 : files.length;
+    const subfolderCount = subfolders.length;
 
-  return {
-    _id: folder._id as Types.ObjectId,
-    name: folder.name,
-    files: files.map((f) => f._id) as Types.ObjectId[],
-    totalLeads,
-    fileCount,
-    subfolderCount,
-    subfolders: subfolderDetails,
-    displayCount,
-    countType,
+    const countType: "files" | "folders" = hasSubfolders ? "folders" : "files";
+    const displayCount = hasSubfolders ? subfolderCount : files.length;
+
+    return {
+      _id: folder._id as Types.ObjectId,
+      name: folder.name,
+      files: files.map((f) => f._id) as Types.ObjectId[],
+      totalLeads,
+      fileCount,
+      subfolderCount,
+      subfolders: subfolderDetails,
+      displayCount,
+      countType,
+    };
   };
-};
 
-  // Build the tree for all root folders
-  const data: FolderDetails[] = await Promise.all(rootFolders.map((f) => getFolderDetails(f)));
+  // Build the tree
+  let data: FolderDetails[] = await Promise.all(rootFolders.map((f) => getFolderDetails(f)));
+
+  // Move specific folders to the end by ID
+  const lastFolderIds = [
+    "68f88e9431973907ce15c7a6", // ALL BANGLADESH 64 DISTRICT
+    "68f89b7155fe957f4037318c", // international leads
+  ];
+
+  // Sort data again: move specific IDs to bottom
+  data = data.sort((a, b) => {
+    const aIsLast = lastFolderIds.includes(String(a._id));
+    const bIsLast = lastFolderIds.includes(String(b._id));
+
+    if (aIsLast && !bIsLast) return 1;
+    if (!aIsLast && bIsLast) return -1;
+    return a.name.localeCompare(b.name);
+  });
 
   res.status(200).json({
     statusCode: 200,
@@ -119,6 +135,7 @@ const getFolderDetails = async (folder: IFolder): Promise<FolderDetails> => {
     success: true,
   });
 });
+
 
 /**
  * GET /api/folders
